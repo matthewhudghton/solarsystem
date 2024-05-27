@@ -103,7 +103,7 @@ window.addEventListener('load', function() {
         { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 25, b: 22, period: 30, initialPhase: 5.6789 } }
     ]}},
     { name: "Golarion", size: 14, color: "cyan", fontSize: 14, orbit: { a: 200, b: 180, period: 365, initialPhase: 6.7890, moons: [
-        { name: "Moon", size: 4, color: "gray", fontSize: 8, orbit: { a: 20, b: 20, period: 27, initialPhase: 0.1234 } },
+        { name: "Moon", size: 4, color: "gray", fontSize: 8, orbit: { a: 40, b: 40, period: 27, initialPhase: 0.1234 } },
     ]}},
     { name: "Sky Ring 1", size: 14, color: "gray", fontSize: 14, orbit: { a: 70, b: 50, period: 365, initialPhase: 6.7890, moons: []}},
     { name: "Sky Ring 2", size: 14, color: "gray", fontSize: 14, orbit: { a: 160, b: 70, period: 565, initialPhase: 6.7890, moons: []}},
@@ -128,7 +128,7 @@ window.addEventListener('load', function() {
     { name: "Eox", size: 7, color: "gray", fontSize: 12, orbit: { a: 350, b: 320, period: 850, initialPhase: 6.7890, moons: [
         { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 28, b: 26, period: 35, initialPhase: 0.1234 } },
         { name: "", size: 2, color: "gray", fontSize: 8, orbit: { a: 40, b: 38, period: 50, initialPhase: 1.2345 } },
-        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 45, b: 43, period: 55, initialPhase: 2.3456 } }
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 145, b: 143, period: 55, initialPhase: 2.3456 } }
     ]}},
     { name: "Triaxus", size: 9, color: "orange", fontSize: 12, orbit: { a: 400, b: 350, period: 1000, initialPhase: 3.4567, moons: [
         { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 40, b: 37, period: 60, initialPhase: 4.5678 } }
@@ -140,14 +140,14 @@ window.addEventListener('load', function() {
     { name: "Bretheda", size: 37, color: "blue", fontSize: 12, orbit: { a: 500, b: 450, period: 1200, initialPhase: 1.2345, moons: [
         { name: "", size: 6, color: "gray", fontSize: 8, orbit: { a: 50, b: 48, period: 70, initialPhase: 2.3456 } },
         { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 60, b: 55, period: 80, initialPhase: 3.4567 } },
-        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 70, b: 65, period: 90, initialPhase: 4.5678 } }
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 170, b: 165, period: 90, initialPhase: 4.5678 } }
     ]}},
     { name: "Apostae", size: 8, color: "brown", fontSize: 12, orbit: { a: 350, b: 500, period: 1300, initialPhase: 5.6789, moons: [
         { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 30, b: 27, period: 40, initialPhase: 6.7890 } },
-        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 35, b: 30, period: 50, initialPhase: 0.1234 } },
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 35, b: 30, Period: 50, initialPhase: 0.1234 } },
         { name: "", size: 2, color: "gray", fontSize: 8, orbit: { a: 45, b: 40, period: 60, initialPhase: 1.2345 } },
-        { name: "", size: 1, color: "gray", fontSize: 8, orbit: { a: 55, b: 50, period: 70, initialPhase: 2.3456 } },
-        { name: "", size: 1, color: "gray", fontSize: 8, orbit: { a: 60, b: 55, period: 75, initialPhase: 3.4567 } }
+        { name: "", size: 1, color: "gray", fontSize: 8, orbit: { a: 155, b: 120, period: 70, initialPhase: 2.3456 } },
+        { name: "", size: 1, color: "gray", fontSize: 8, orbit: { a: 160, b: 155, period: 75, initialPhase: 3.4567 } }
     ]}},
     { name: "Aucturn", size: 14, color: "purple", fontSize: 12, orbit: { a: 600, b: 350, period: 1400, initialPhase: 4.5678, moons: [
         { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 30, b: 28, period: 45, initialPhase: 5.6789 } }
@@ -155,7 +155,7 @@ window.addEventListener('load', function() {
 ]
 ;
         let timeInterval;
-        let isPlaying = false;
+        let isPlaying = true;
         let currentTime = startTime;
       let targetX = 0;
       let targetY = 0;
@@ -194,7 +194,7 @@ ctx.beginPath();
         }
 
         function getPlanetPosition(a, b, period, time, initialPhase) {
-            const angle = (2 * Math.PI * time / period) + initialPhase;
+            const angle = (2 * Math.PI * time / (period * 60 * 60 * 24)) + initialPhase;
             const x = a * Math.cos(angle);
             const y = b * Math.sin(angle);
             return { x, y };
@@ -239,24 +239,26 @@ ctx.beginPath();
         }
 function parseString(str){
    const list = str.split(/[v-zV-Z]/);
-  if(list.length < 2){
+  if(list.length < 1){
     console.log("Invalid string");
     return 0;
   }
-  
-    x = parseIntString(list[0]);
-    y = parseIntString(list[1]);
-    setCoordinates(x, y);
-    targetX = x;
-    targetY = y;
-    if(list.length > 2){
-      inputTime = parseIntString(list[2]);
+      inputTime = parseIntString(list[0]);
       if(isNaN(inputTime)){
               return;
       }
       currentTime = startTime + inputTime;
       setTime(currentTime);
+      isPlaying = false;
       animate();
+
+
+    if(list.length > 2){
+    x = parseIntString(list[1]);
+    y = parseIntString(list[2]);
+    setCoordinates(x, y);
+    targetX = x;
+    targetY = y;
     }
 
 }
@@ -265,7 +267,7 @@ function parseString(str){
 drawLineToCoordinates(targetX, targetY);
             updateTimeDisplay(currentTime);
             if (isPlaying) {  
-          currentTime += 1;
+          currentTime += 1 * 60 * 60;
           }
             requestAnimationFrame(animate);
         }
@@ -279,7 +281,7 @@ drawLineToCoordinates(targetX, targetY);
         function isPlanetAtCoordinates(planets, time, x, y) {
             for (const planet of planets) {
                 const { a, b, period, initialPhase, moons } = planet.orbit;
-                
+              
                 // Calculate the position of the planet in its orbit
                 const { x: planetX, y: planetY } = getPlanetPosition(a, b, period, time, initialPhase);
                 
