@@ -44,6 +44,9 @@
         <button id="playPauseButton">Play / Pause</button>
     </div>
     <script>
+
+window.addEventListener('load', function() {
+
         const canvas = document.getElementById('orbitCanvas');
         const ctx = canvas.getContext('2d');
         const width = canvas.width;
@@ -114,8 +117,12 @@
         let timeInterval;
         let isPlaying = true;
         let currentTime = 1713299099;
+  let targetX = 0;
+  let targetY = 0;
+
         function drawOrbit(a, b, initialPhase) {
             ctx.beginPath();
+            ctx.lineWidth = 1:;
             for (let angle = 0; angle <= 2 * Math.PI; angle += 0.01) {
                 const x = a * Math.cos(angle + initialPhase);
                 const y = b * Math.sin(angle + initialPhase);
@@ -192,7 +199,8 @@ ctx.beginPath();
         }
 
         function animate() {
-            drawScene(currentTime); 
+            drawScene(currentTime);
+drawLineToCoordinates(targetX, targetY);
             updateTimeDisplay(currentTime);
             if (isPlaying) {  
           currentTime += 1;
@@ -248,20 +256,30 @@ ctx.beginPath();
             const y = parseInt(document.getElementById('yCoordInput').value);
             if (!isNaN(x) && !isNaN(y)) {
                 // Draw lines and set time
-                drawCrossLines(x, y);
-                currentTime = Math.floor(Date.now() / 1000); // Setting current time to current Unix timestamp
-            }
+            console.log("Drawing ", x , y);
+  
+      targetX = x;
+      targetY = y;
+    }
         });
-
-        function drawCrossLines(x, y) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-            ctx.moveTo(0, y);
-            ctx.lineTo(width, y);
-            ctx.strokeStyle = 'white';
-            ctx.stroke();
-        }
+                      function drawLineToCoordinates(x, y) {
+    if(x == 0 && y == 0){
+return;
+    }
+                const golarion = planets.find(planet => planet.name === 'Golarion');
+                if (golarion) {
+                    const { a, b, period, initialPhase } = golarion.orbit;
+                    const { x: golarionX, y: golarionY } = getPlanetPosition(a*3, b*3, period, currentTime, initialPhase);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + golarionX, centerY + golarionY);
+                    ctx.lineTo(x+centerX, y+centerY);
+                    ctx.lineWidth = 5;
+                    ctx.strokeStyle = 'purple';
+                    ctx.stroke();
+                }
+  }
+        
 
 
 
@@ -280,6 +298,8 @@ ctx.beginPath();
         } else {
             console.log(`No planet is at (${checkX},${checkY}) at time ${checkTime}s`);
         }
+
+  });
     </script>
 </body>
 </html>
