@@ -30,6 +30,9 @@
     { name: "Golarion", size: 14, color: "cyan", fontSize: 14, orbit: { a: 200, b: 180, period: 365, initialPhase: 6.7890, moons: [
         { name: "Moon", size: 4, color: "gray", fontSize: 8, orbit: { a: 20, b: 20, period: 27, initialPhase: 0.1234 } },
     ]}},
+    { name: "Sky Ring 1", size: 14, color: "gray", fontSize: 14, orbit: { a: 70, b: 50, period: 365, initialPhase: 6.7890, moons: []}},
+    { name: "Sky Ring 2", size: 14, color: "gray", fontSize: 14, orbit: { a: 160, b: 70, period: 565, initialPhase: 6.7890, moons: []}},
+    { name: "Sky Ring 3", size: 14, color: "gray", fontSize: 14, orbit: { a: 50, b: 150, period: 765, initialPhase: 6.7890, moons: []}},
     { name: "Akiton", size: 10, color: "red", fontSize: 12, orbit: { a: 250, b: 240, period: 687, initialPhase: 1.2345, moons: [
         { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 30, b: 28, period: 25, initialPhase: 2.3456 } }
     ]}},
@@ -88,11 +91,22 @@
             ctx.stroke();
         }
 
-        function drawPlanet(x, y, size, color, label, fontSize) {
+        function drawPlanet(x, y, size, color, label, fontSize, isRing) {
+          if(isRing){
+const outerRadius = size;
+const ringThickness = 3;
+ctx.beginPath();
+    ctx.arc(centerX + x, centerY + y, outerRadius, 0, 2 * Math.PI);
+    ctx.arc(centerX + x, centerY + y, outerRadius - ringThickness, 0, 2 * Math.PI, true);
+    ctx.fillStyle = color;
+    ctx.fill();
+          } else {
+            
             ctx.beginPath();
             ctx.arc(centerX + x, centerY + y, size, 0, 2 * Math.PI);
             ctx.fillStyle = color;
-            ctx.fill();
+
+            ctx.fill();}
             ctx.font = `${fontSize}px Arial`;
             ctx.fillStyle = 'white';
             ctx.fillText(label, centerX + x + size, centerY + y + size);
@@ -126,7 +140,7 @@
 
                 // Calculate and draw planet's position
                 const { x: planetX, y: planetY } = getPlanetPosition(a, b, period, time, initialPhase);
-                drawPlanet(planetX, planetY, planet.size, planet.color, planet.name, planet.fontSize);
+                drawPlanet(planetX, planetY, planet.size, planet.color, planet.name, planet.fontSize, planet.name.indexOf("Ring") != -1);
 
                 // Draw moons if any
                 if (moons) {
