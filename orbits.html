@@ -7,10 +7,42 @@
         canvas {
             border: 1px solid black;
         }
+        #timeDisplay, #controls {
+            position: fixed;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: white;
+        }
+        #timeDisplay {
+            top: 10px;
+            left: 10px;
+        }
+            #timeDisplay { 
+    position: fixed;
+            top: 10px;
+            left: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: white;}
+            #controls {
+            top: 10px;
+            right: 10px;
+        }
+        #controls input[type="text"], #controls button {
+            margin: 5px;
+        }
     </style>
 </head>
-<body>
+<body> <div id="timeDisplay"></div>
     <canvas id="orbitCanvas" width="5000" height="5000"></canvas>
+    <div id="controls">
+        <input type="text" id="dateInput" placeholder="Enter Timestamp">
+        <button id="goToDateButton">Go to Date</button>
+        <input type="text" id="xCoordInput" placeholder="X Coordinate">
+        <input type="text" id="yCoordInput" placeholder="Y Coordinate">
+        <button id="goToCoordinatesButton">Go to Coordinates</button>
+        <button id="playPauseButton">Play / Pause</button>
+    </div>
     <script>
         const canvas = document.getElementById('orbitCanvas');
         const ctx = canvas.getContext('2d');
@@ -79,7 +111,9 @@
     ]}}
 ]
 ;
-
+        let timeInterval;
+        let isPlaying = true;
+        let currentTime = 1713299099;
         function drawOrbit(a, b, initialPhase) {
             ctx.beginPath();
             for (let angle = 0; angle <= 2 * Math.PI; angle += 0.01) {
@@ -157,15 +191,21 @@ ctx.beginPath();
             }
         }
 
-        let time = 0;
         function animate() {
-            drawScene(time);
-            time += 1;
+            drawScene(currentTime); 
+            updateTimeDisplay(currentTime);
+            if (isPlaying) {  
+          currentTime += 1;
+          }
             requestAnimationFrame(animate);
         }
 
         animate();
-
+        function updateTimeDisplay(time) {
+            const unixTimestamp = time;
+            const utcDatetime = new Date(unixTimestamp* 1000 ).toUTCString();
+            document.getElementById('timeDisplay').innerHTML = `Timestamp: ${unixTimestamp}<br>UTC Datetime: ${utcDatetime}`;
+        }
         function isPlanetAtCoordinates(planets, time, x, y) {
             for (const planet of planets) {
                 const { a, b, period, initialPhase, moons } = planet.orbit;
@@ -195,6 +235,40 @@ ctx.beginPath();
             }
             return null;
         }
+
+        document.getElementById('goToDateButton').addEventListener('click', function() {
+            const inputDate = parseInt(document.getElementById('dateInput').value);
+            if (!isNaN(inputDate)) {
+                currentTime = inputDate;
+            }
+        });
+
+        document.getElementById('goToCoordinatesButton').addEventListener('click', function() {
+            const x = parseInt(document.getElementById('xCoordInput').value);
+            const y = parseInt(document.getElementById('yCoordInput').value);
+            if (!isNaN(x) && !isNaN(y)) {
+                // Draw lines and set time
+                drawCrossLines(x, y);
+                currentTime = Math.floor(Date.now() / 1000); // Setting current time to current Unix timestamp
+            }
+        });
+
+        function drawCrossLines(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.strokeStyle = 'white';
+            ctx.stroke();
+        }
+
+
+
+
+        document.getElementById('playPauseButton').addEventListener('click', function() {
+            isPlaying = !isPlaying;
+        });
 
         // Example usage:
         const checkTime = 365; // seconds
