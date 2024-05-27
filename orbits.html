@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Golarion Solar System Simulation</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="orbitCanvas" width="1200" height="1200"></canvas>
+    <script>
+        const canvas = document.getElementById('orbitCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        const planets = 
+[
+    { name: "Aballon", size: 10, color: "blue", fontSize: 12, orbit: { a: 100, b: 90, period: 88, initialPhase: 1.2345, moons: [
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 15, b: 13, period: 15, initialPhase: 2.3456 } }
+    ]}},
+    { name: "Castrovel", size: 12, color: "green", fontSize: 12, orbit: { a: 150, b: 130, period: 225, initialPhase: 3.4567, moons: [
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 20, b: 18, period: 20, initialPhase: 4.5678 } },
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 25, b: 22, period: 30, initialPhase: 5.6789 } }
+    ]}},
+    { name: "Golarion", size: 14, color: "cyan", fontSize: 14, orbit: { a: 200, b: 180, period: 365, initialPhase: 6.7890, moons: [
+        { name: "Moon", size: 4, color: "gray", fontSize: 8, orbit: { a: 20, b: 20, period: 27, initialPhase: 0.1234 } },
+    ]}},
+    { name: "Akiton", size: 10, color: "red", fontSize: 12, orbit: { a: 250, b: 240, period: 687, initialPhase: 1.2345, moons: [
+        { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 30, b: 28, period: 25, initialPhase: 2.3456 } }
+    ]}},
+    { name: "Verces", size: 8, color: "purple", fontSize: 12, orbit: { a: 300, b: 270, period: 760, initialPhase: 3.4567, moons: [
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 23, period: 30, initialPhase: 4.5678 } },
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 35, b: 30, period: 40, initialPhase: 5.6789 } }
+    ]}},
+    { name: "Eox", size: 7, color: "gray", fontSize: 12, orbit: { a: 350, b: 320, period: 850, initialPhase: 6.7890, moons: [
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 28, b: 26, period: 35, initialPhase: 0.1234 } },
+        { name: "", size: 2, color: "gray", fontSize: 8, orbit: { a: 40, b: 38, period: 50, initialPhase: 1.2345 } },
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 45, b: 43, period: 55, initialPhase: 2.3456 } }
+    ]}},
+    { name: "Triaxus", size: 9, color: "orange", fontSize: 12, orbit: { a: 400, b: 350, period: 1000, initialPhase: 3.4567, moons: [
+        { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 40, b: 37, period: 60, initialPhase: 4.5678 } }
+    ]}},
+    { name: "Liavara", size: 30, color: "orange", fontSize: 12, orbit: { a: 450, b: 400, period: 1100, initialPhase: 5.6789, moons: [
+        { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 35, b: 30, period: 55, initialPhase: 6.7890 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 45, b: 40, period: 65, initialPhase: 0.1234 } }
+    ]}},
+    { name: "Bretheda", size: 37, color: "blue", fontSize: 12, orbit: { a: 500, b: 450, period: 1200, initialPhase: 1.2345, moons: [
+        { name: "", size: 6, color: "gray", fontSize: 8, orbit: { a: 50, b: 48, period: 70, initialPhase: 2.3456 } },
+        { name: "", size: 5, color: "gray", fontSize: 8, orbit: { a: 60, b: 55, period: 80, initialPhase: 3.4567 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 70, b: 65, period: 90, initialPhase: 4.5678 } }
+    ]}},
+    { name: "Apostae", size: 8, color: "brown", fontSize: 12, orbit: { a: 350, b: 500, period: 1300, initialPhase: 5.6789, moons: [
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 30, b: 27, period: 40, initialPhase: 6.7890 } },
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 35, b: 30, period: 50, initialPhase: 0.1234 } },
+        { name: "", size: 2, color: "gray", fontSize: 8, orbit: { a: 45, b: 40, period: 60, initialPhase: 1.2345 } },
+        { name: "", size: 1, color: "gray", fontSize: 8, orbit: { a: 55, b: 50, period: 70, initialPhase: 2.3456 } },
+        { name: "", size: 1, color: "gray", fontSize: 8, orbit: { a: 60, b: 55, period: 75, initialPhase: 3.4567 } }
+    ]}},
+    { name: "Aucturn", size: 14, color: "purple", fontSize: 12, orbit: { a: 600, b: 350, period: 1400, initialPhase: 4.5678, moons: [
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 30, b: 28, period: 45, initialPhase: 5.6789 } }
+    ]}}
+]
+;
+
+        function drawOrbit(a, b, initialPhase) {
+            ctx.beginPath();
+            for (let angle = 0; angle <= 2 * Math.PI; angle += 0.01) {
+                const x = a * Math.cos(angle + initialPhase);
+                const y = b * Math.sin(angle + initialPhase);
+                ctx.lineTo(centerX + x, centerY + y);
+            }
+            ctx.strokeStyle = 'lightgray';
+            ctx.stroke();
+        }
+
+        function drawPlanet(x, y, size, color, label, fontSize) {
+            ctx.beginPath();
+            ctx.arc(centerX + x, centerY + y, size, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.font = `${fontSize}px Arial`;
+            ctx.fillStyle = 'white';
+            ctx.fillText(label, centerX + x + size, centerY + y + size);
+        }
+
+        function getPlanetPosition(a, b, period, time, initialPhase) {
+            const angle = (2 * Math.PI * time / period) + initialPhase;
+            const x = a * Math.cos(angle);
+            const y = b * Math.sin(angle);
+            return { x, y };
+        }
+
+        function drawScene(time) {
+            ctx.fillStyle = "rgb(0,0,0)"
+            ctx.fillRect(0,0,width, height);
+            // ctx.clearRect(0, 0, width, height);
+
+            // Draw the sun at the center
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+
+            for (const planet of planets) {
+                const { a, b, period, initialPhase, moons } = planet.orbit;
+                
+                // Draw the orbit
+                drawOrbit(a, b, initialPhase);
+
+                // Calculate and draw planet's position
+                const { x: planetX, y: planetY } = getPlanetPosition(a, b, period, time, initialPhase);
+                drawPlanet(planetX, planetY, planet.size, planet.color, planet.name, planet.fontSize);
+
+                // Draw moons if any
+                if (moons) {
+                    for (const moon of moons) {
+                        const { a: moonA, b: moonB, period: moonPeriod, initialPhase: moonInitialPhase } = moon.orbit;
+                        const { x: moonX, y: moonY } = getPlanetPosition(moonA, moonB, moonPeriod, time, moonInitialPhase);
+
+                        // Calculate moon's position relative to the planet
+                        const absoluteMoonX = planetX + moonX;
+                        const absoluteMoonY = planetY + moonY;
+                        drawPlanet(absoluteMoonX, absoluteMoonY, moon.size, moon.color, moon.name, moon.fontSize);
+                    }
+                }
+            }
+        }
+
+        let time = 0;
+        function animate() {
+            drawScene(time);
+            time += 1;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        function isPlanetAtCoordinates(planets, time, x, y) {
+            for (const planet of planets) {
+                const { a, b, period, initialPhase, moons } = planet.orbit;
+                
+                // Calculate the position of the planet in its orbit
+                const { x: planetX, y: planetY } = getPlanetPosition(a, b, period, time, initialPhase);
+                
+                if (Math.abs(planetX - x) < 1e-6 && Math.abs(planetY - y) < 1e-6) {
+                    return planet.name;
+                }
+
+                // Check moons if any
+                if (moons) {
+                    for (const moon of moons) {
+                        const { a: moonA, b: moonB, period: moonPeriod, initialPhase: moonInitialPhase } = moon.orbit;
+                        const { x: moonX, y: moonY } = getPlanetPosition(moonA, moonB, moonPeriod, time, moonInitialPhase);
+
+                        // Calculate moon's position relative to the planet
+                        const absoluteMoonX = planetX + moonX;
+                        const absoluteMoonY = planetY + moonY;
+
+                        if (Math.abs(absoluteMoonX - x) < 1e-6 && Math.abs(absoluteMoonY - y) < 1e-6) {
+                            return `${moon.name} of ${planet.name}`;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Example usage:
+        const checkTime = 365; // seconds
+        const checkX = 200;
+        const checkY = 0;
+        const planetName = isPlanetAtCoordinates(planets, checkTime, checkX, checkY);
+        if (planetName) {
+            console.log(`At time ${checkTime}s, ${planetName} is at (${checkX},${checkY})`);
+        } else {
+            console.log(`No planet is at (${checkX},${checkY}) at time ${checkTime}s`);
+        }
+    </script>
+</body>
+</html>
+
