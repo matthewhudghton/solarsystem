@@ -122,7 +122,7 @@ window.addEventListener('load', function() {
 
         function drawOrbit(a, b, initialPhase) {
             ctx.beginPath();
-            ctx.lineWidth = 1:;
+            ctx.lineWidth = 1;
             for (let angle = 0; angle <= 2 * Math.PI; angle += 0.01) {
                 const x = a * Math.cos(angle + initialPhase);
                 const y = b * Math.sin(angle + initialPhase);
@@ -280,7 +280,12 @@ return;
                 }
   }
         
-
+            canvas.addEventListener('click', function(event) {
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = event.clientX - rect.left - centerX;
+                const mouseY = event.clientY - rect.top - centerY;
+                console.log('Relative X:', mouseX, 'Relative Y:', mouseY);
+            });
 
 
 
