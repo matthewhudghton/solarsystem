@@ -30,12 +30,13 @@
         }
         #controls input[type="text"], #controls button {
             margin: 5px;
-        }
+        } 
     </style>
 </head>
 <body> <div id="timeDisplay"></div>
     <canvas id="orbitCanvas" width="5000" height="5000"></canvas>
     <div id="controls">
+        <input type="text" id="dragonTextBox" placeholder="Enter Dragon Text">
         <input type="text" id="dateInput" placeholder="Enter Timestamp">
         <button id="goToDateButton">Go to Date</button>
         <input type="text" id="xCoordInput" placeholder="X Coordinate">
@@ -45,7 +46,10 @@
     </div>
     <script>
 
-function parseString(str) {
+        const startTime = 1713299099;
+
+    // u is largest
+function parseIntString(str) {
     let odd = '';
     let even = '';
   
@@ -71,6 +75,16 @@ function parseString(str) {
   
     return result;
 }
+function setTime(time) {
+    document.getElementById('dateInput').value = time;
+}function setCoordinates(x, y) {
+    document.getElementById('xCoordInput').value = x;
+    document.getElementById('yCoordInput').value = y;
+}
+//delimiter is any character not a number, eg. any above u , so v and above
+
+
+
 window.addEventListener('load', function() {
 
         const canvas = document.getElementById('orbitCanvas');
@@ -142,7 +156,7 @@ window.addEventListener('load', function() {
 ;
         let timeInterval;
         let isPlaying = false;
-        let currentTime = 1713299099;
+        let currentTime = startTime;
       let targetX = 0;
       let targetY = 0;
 
@@ -223,7 +237,29 @@ ctx.beginPath();
                 }
             }
         }
+function parseString(str){
+   const list = str.split(/[v-zV-Z]/);
+  if(list.length < 2){
+    console.log("Invalid string");
+    return 0;
+  }
+  
+    x = parseIntString(list[0]);
+    y = parseIntString(list[1]);
+    setCoordinates(x, y);
+    targetX = x;
+    targetY = y;
+    if(list.length > 2){
+      inputTime = parseIntString(list[2]);
+      if(isNaN(inputTime)){
+              return;
+      }
+      currentTime = startTime + inputTime;
+      setTime(currentTime);
+      animate();
+    }
 
+}
         function animate() {
             drawScene(currentTime);
 drawLineToCoordinates(targetX, targetY);
@@ -313,7 +349,10 @@ return;
                 console.log('Relative X:', mouseX, 'Relative Y:', mouseY);
             });
 
-
+        document.getElementById('dragonTextBox').addEventListener('input', function(event) {
+            const text = event.target.value;
+    parseString(text);
+        });
 
         document.getElementById('playPauseButton').addEventListener('click', function() {
             isPlaying = !isPlaying;
