@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-    <canvas id="orbitCanvas" width="1200" height="1200"></canvas>
+    <canvas id="orbitCanvas" width="5000" height="5000"></canvas>
     <script>
         const canvas = document.getElementById('orbitCanvas');
         const ctx = canvas.getContext('2d');
@@ -18,7 +18,6 @@
         const height = canvas.height;
         const centerX = width / 2;
         const centerY = height / 2;
-
         const planets = 
 [
     { name: "Aballon", size: 10, color: "blue", fontSize: 12, orbit: { a: 100, b: 90, period: 88, initialPhase: 1.2345, moons: [
@@ -37,6 +36,16 @@
     { name: "Verces", size: 8, color: "purple", fontSize: 12, orbit: { a: 300, b: 270, period: 760, initialPhase: 3.4567, moons: [
         { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 23, period: 30, initialPhase: 4.5678 } },
         { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 35, b: 30, period: 40, initialPhase: 5.6789 } }
+    ]}},
+    { name: "The Diaspora", size: 2, color: "gray", fontSize: 12, orbit: { a: 320, b: 270, period: 760, initialPhase: 1.4567, moons: [
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 23, period: 130, initialPhase: 1.5678 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 15, b: 23, period: 130, initialPhase: 4.5678 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 33, period: 170, initialPhase: 2.5678 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 13, period: 130, initialPhase: 4.5678 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 26, period: 110, initialPhase: 8.5678 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 15, b: 13, period: 230, initialPhase: 4.5678 } },
+        { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 25, b: 53, period: 335, initialPhase: 9.5678 } },
+        { name: "", size: 3, color: "gray", fontSize: 8, orbit: { a: 25, b: 30, period: 221, initialPhase: 1.6789 } }
     ]}},
     { name: "Eox", size: 7, color: "gray", fontSize: 12, orbit: { a: 350, b: 320, period: 850, initialPhase: 6.7890, moons: [
         { name: "", size: 4, color: "gray", fontSize: 8, orbit: { a: 28, b: 26, period: 35, initialPhase: 0.1234 } },
@@ -103,13 +112,15 @@
 
             // Draw the sun at the center
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+            ctx.arc(centerX, centerY, 100, 0, 2 * Math.PI);
             ctx.fillStyle = 'yellow';
             ctx.fill();
 
             for (const planet of planets) {
-                const { a, b, period, initialPhase, moons } = planet.orbit;
-                
+                let { a, b, period, initialPhase, moons } = planet.orbit;
+                const orbit_scale = 3;
+                 a = a * orbit_scale;
+                 b = b * orbit_scale;
                 // Draw the orbit
                 drawOrbit(a, b, initialPhase);
 
