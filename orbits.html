@@ -45,6 +45,32 @@
     </div>
     <script>
 
+function parseString(str) {
+    let odd = '';
+    let even = '';
+  
+    // Separate odd and even characters
+    for (let i = 0 ; i < str.length ; i++) {
+        if ((str.length-1-i) % 2 === 0) {
+            odd += str[i];
+        } else {
+            even += str[i];
+        }
+    }
+  
+    // Convert odd to base 31 integer
+    const oddInt = odd.length == 0 ? 0 : parseInt(odd, 31);
+  console.log("odd", odd)
+  
+  console.log("even", even)
+    // Convert even to negative base 31 integer
+    const evenInt = even.length == 0 ? 0 : -parseInt(even, 31);
+  
+    // Add odd and even integers
+    const result = oddInt + evenInt;
+  
+    return result;
+}
 window.addEventListener('load', function() {
 
         const canvas = document.getElementById('orbitCanvas');
@@ -115,10 +141,10 @@ window.addEventListener('load', function() {
 ]
 ;
         let timeInterval;
-        let isPlaying = true;
+        let isPlaying = false;
         let currentTime = 1713299099;
-  let targetX = 0;
-  let targetY = 0;
+      let targetX = 0;
+      let targetY = 0;
 
         function drawOrbit(a, b, initialPhase) {
             ctx.beginPath();
