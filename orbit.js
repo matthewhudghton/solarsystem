@@ -274,6 +274,9 @@ window.addEventListener('load', function() {
       setCoordinates(x, y);
       targetX = x;
       targetY = y;
+    } else {
+      targetX = 0;
+      targetY = 0;
     }
 
   }
