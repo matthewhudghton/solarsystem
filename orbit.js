@@ -17,9 +17,6 @@ function parseIntString(str) {
 
   // Convert odd to base 31 integer
   const oddInt = odd.length == 0 ? 0 : parseInt(odd, 31);
-  console.log("odd", odd)
-
-  console.log("even", even)
   // Convert even to negative base 31 integer
   const evenInt = even.length == 0 ? 0 : -parseInt(even, 31);
 
@@ -333,6 +330,7 @@ window.addEventListener('load', function() {
       playSpeed = Math.max(-playSpeed / 2, -60);
     }
     playSpeed *= 2;
+    playSpeed = Math.min(playSpeed, -1);
   });
 
   document.getElementById('slower-button').addEventListener('click', function() {
@@ -344,13 +342,15 @@ window.addEventListener('load', function() {
     }
   });
   document.getElementById('faster-button').addEventListener('click', function() {
-    if (playSpeed < 0) {
-      playSpeed = Math.min(-playSpeed / 2, 60);
+    if (playSpeed <= 0) {
+      playSpeed = Math.max(Math.min(-playSpeed / 2, 60), 1);
 
       playSpeed = -playSpeed / 2;
     }
 
     playSpeed = Math.ceil(playSpeed * 2);
+    playSpeed = Math.max(playSpeed, 1);
+
   });
   document.getElementById('goToDateButton').addEventListener('click', function() {
     const inputDate = parseInt(document.getElementById('dateInput').value);
@@ -364,7 +364,6 @@ window.addEventListener('load', function() {
     const y = parseInt(document.getElementById('yCoordInput').value);
     if (!isNaN(x) && !isNaN(y)) {
       // Draw lines and set time
-      console.log("Drawing ", x, y);
 
       targetX = x;
       targetY = y;
