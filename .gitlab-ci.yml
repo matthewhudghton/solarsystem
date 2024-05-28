@@ -3,7 +3,8 @@ image: node:latest
 pages:
   script:
     - mkdir .public
-    - cp -r * .public
+    - cp -r *.html .public
+    - cp -r *.min.js .public
     - mv .public public
   artifacts:
     paths:
