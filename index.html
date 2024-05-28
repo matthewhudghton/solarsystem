@@ -35,9 +35,12 @@
         #controls input[type="text"], #controls button {
             margin: 5px;
             font-size : xx-large;
-
             font-family: Iokharic, sans-serif;
         } 
+    #controls input[type="text"] {
+    width : 500px ; 
+    }
+
         .hide {
             display : none; 
          }
@@ -75,6 +78,32 @@
         .material-icons {
             vertical-align: middle;
         }
+
+
+          .gold {
+            border: 2px solid #7d4e0d;
+            background: linear-gradient(to bottom, #ffd700, #ffd700 50%, #e3aa00 50%, #e3aa00);
+            color: #8b0000;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px #7d4e0d;
+            outline: none; /* Remove default focus outline */
+        }
+
+        /* Style for placeholder text */
+        .gold::placeholder {
+            color: #8b0000;
+            font-weight: bold;
+            opacity: 0.5; /* Adjust opacity for placeholder text */
+        }
+
+        /* Style for focused state */
+        .gold:focus {
+            border-color: #8b0000;
+            box-shadow: 0px 0px 10px #8b0000;
+        }
+
+
     </style>
 </head>
 <body> <div id="timeDisplay"></div>
@@ -85,21 +114,21 @@
         <input type="text" id="xCoordInput" placeholder="X Coordinate" class="hide" >
         <input type="text" id="yCoordInput" placeholder="Y Coordinate" class="hide" >
         <button id="goToCoordinatesButton" class="hide" >Go to Coordinates</button>
-        <button id="playPauseButton"  class="control-button" id="play-pause-button">
+        <button id="playPauseButton"  class="gold control-button" id="play-pause-button">
             <span class="material-icons">play_arrow/pause</span>
         </button>
-        <button class="control-button" id="rewind-button">
+        <button class="gold control-button" id="rewind-button">
             <span class="material-icons">fast_rewind</span>
         </button>
 
-        <button class="control-button" id="slower-button">
+        <button class="gold control-button" id="slower-button">
             <span class="material-icons">slow_motion_video</span>
         </button>
-        <button class="control-button" id="faster-button">
+        <button class="gold control-button" id="faster-button">
             <span class="material-icons">fast_forward</span>
         </button>
 
-        <input type="text" id="dragonTextBox" placeholder="Enter Chosen Symbols">
+        <input type="text" class="gold" id="dragonTextBox" placeholder="Enter Chosen Symbols">
     </div>
     <script src="orbit.js"></script>
 </body>
