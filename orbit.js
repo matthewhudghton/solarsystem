@@ -247,9 +247,11 @@ window.addEventListener('load', function() {
       str = str.slice(1);
       enableEnglish = true;
       document.getElementById('dragonTextBox').style.fontFamily = "'Trajan Pro', serif";
+      document.getElementById('timeDisplay').style.fontFamily = "'Trajan Pro', serif";
     } else {
       enableEnglish = false;
       document.getElementById('dragonTextBox').style.fontFamily = "Iokharic, sans-serif";
+      document.getElementById('timeDisplay').style.fontFamily = "Iokharic, sans-serif";
     }
 
 
