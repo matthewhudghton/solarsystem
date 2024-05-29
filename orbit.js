@@ -155,7 +155,7 @@ window.addEventListener('load', function() {
     ;
   let timeInterval;
   let isPlaying = true;
-  let playSpeed = 1 * 60 * 60;
+  let playSpeed = 0.1;
   let currentTime = startTime;
   let targetX = 0;
   let targetY = 0;
@@ -264,7 +264,7 @@ window.addEventListener('load', function() {
     currentTime = startTime + inputTime;
     setTime(currentTime);
     isPlaying = false;
-    animate();
+    animate(0);
 
 
     if (list.length > 2) {
@@ -279,17 +279,35 @@ window.addEventListener('load', function() {
     }
 
   }
-  function animate() {
+
+
+let lastTime = performance.now();
+const fps = 60;
+const frameDuration = 1000/fps;
+function mainLoop(currentTime){
+    
+    const now = performance.now();
+    let timeDelta = now - lastTime;
+    animate(0);
+    while (timeDelta >= frameDuration) {
+        animate(timeDelta);
+        lastTime += frameDuration;
+        timeDelta = now - lastTime;
+    }
+}
+
+  function animate(timeDelta) {
+    if (isPlaying) {
+      currentTime += timeDelta * playSpeed;
+    }
     drawScene(currentTime);
     drawLineToCoordinates(targetX, targetY);
     updateTimeDisplay(currentTime);
-    if (isPlaying) {
-      currentTime += playSpeed;
-    }
     requestAnimationFrame(animate);
   }
 
-  animate();
+  mainLoop();
+  
   function updateTimeDisplay(time) {
     const unixTimestamp = time;
     const utcDatetime = new Date(unixTimestamp * 1000).toUTCString();
