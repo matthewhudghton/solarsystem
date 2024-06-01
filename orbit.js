@@ -290,9 +290,11 @@ window.addEventListener('load', function() {
     let timeDelta = now - lastTime;
     animate(0);
     while (timeDelta >= frameDuration) {
+      now = performance.now();
       animate(timeDelta);
       lastTime += frameDuration;
       timeDelta = now - lastTime;
+      lastTime = performance.now();
     }
   }
 
