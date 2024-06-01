@@ -281,20 +281,20 @@ window.addEventListener('load', function() {
   }
 
 
-let lastTime = performance.now();
-const fps = 60;
-const frameDuration = 1000/fps;
-function mainLoop(currentTime){
-    
+  let lastTime = performance.now();
+  const fps = 60;
+  const frameDuration = 1000 / fps;
+  function mainLoop(currentTime) {
+
     const now = performance.now();
     let timeDelta = now - lastTime;
     animate(0);
     while (timeDelta >= frameDuration) {
-        animate(timeDelta);
-        lastTime += frameDuration;
-        timeDelta = now - lastTime;
+      animate(timeDelta);
+      lastTime += frameDuration;
+      timeDelta = now - lastTime;
     }
-}
+  }
 
   function animate(timeDelta) {
     if (isPlaying) {
@@ -307,7 +307,7 @@ function mainLoop(currentTime){
   }
 
   mainLoop();
-  
+
   function updateTimeDisplay(time) {
     const unixTimestamp = time;
     const utcDatetime = new Date(unixTimestamp * 1000).toUTCString();
@@ -345,7 +345,7 @@ function mainLoop(currentTime){
 
   document.getElementById('rewind-button').addEventListener('click', function() {
     if (playSpeed >= 0) {
-      playSpeed = Math.max(-playSpeed / 2, -60);
+      playSpeed = 1
     }
     playSpeed *= 2;
     playSpeed = Math.min(playSpeed, -1);
@@ -355,15 +355,12 @@ function mainLoop(currentTime){
     if (playSpeed >= 0) {
       playSpeed = Math.max(Math.floor(playSpeed / 2), 1);
     } else {
-
       playSpeed = Math.min(Math.floor(playSpeed / 2), -1);
     }
   });
   document.getElementById('faster-button').addEventListener('click', function() {
     if (playSpeed <= 0) {
-      playSpeed = Math.max(Math.min(-playSpeed / 2, 60), 1);
-
-      playSpeed = -playSpeed / 2;
+      playSpeed = 1
     }
 
     playSpeed = Math.ceil(playSpeed * 2);
