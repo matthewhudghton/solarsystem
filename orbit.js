@@ -353,9 +353,9 @@ window.addEventListener('load', function() {
 
   document.getElementById('slower-button').addEventListener('click', function() {
     if (playSpeed >= 0) {
-      playSpeed = Math.max(Math.floor(playSpeed / 2), 1);
+      playSpeed = Math.max(Math.floor(playSpeed / 2), 0.01);
     } else {
-      playSpeed = Math.min(Math.floor(playSpeed / 2), -1);
+      playSpeed = Math.min(Math.floor(playSpeed / 2), -0.01);
     }
   });
   document.getElementById('faster-button').addEventListener('click', function() {
