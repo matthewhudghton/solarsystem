@@ -289,21 +289,15 @@ window.addEventListener('load', function() {
   function mainLoop(currentTime) {
     const now = performance.now();
     let timeDelta = now - lastTime;
-
-    // Ensure timeDelta doesn't exceed a reasonable amount (e.g., if the game was paused)
     if (timeDelta > 1000) {
       timeDelta = frameDuration;
     }
-
     while (timeDelta >= frameDuration) {
       animate(frameDuration);
       lastTime += frameDuration;
       timeDelta -= frameDuration;
     }
-
     lastTime = now;
-
-    // Request the next frame
     requestAnimationFrame(mainLoop);
   }
 
@@ -322,7 +316,6 @@ window.addEventListener('load', function() {
     // requestAnimationFrame(animate);
   }
 
-  mainLoop();
 
   function updateTimeDisplay(time) {
     const unixTimestamp = time;
@@ -446,3 +439,4 @@ window.addEventListener('load', function() {
   }
 
 });
+
