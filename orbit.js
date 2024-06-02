@@ -284,19 +284,33 @@ window.addEventListener('load', function() {
   let lastTime = performance.now();
   const fps = 60;
   const frameDuration = 1000 / fps;
-  function mainLoop(currentTime) {
 
+
+  function mainLoop(currentTime) {
     const now = performance.now();
     let timeDelta = now - lastTime;
-    animate(0);
-    while (timeDelta >= frameDuration) {
-      now = performance.now();
-      animate(timeDelta);
-      lastTime += frameDuration;
-      timeDelta = now - lastTime;
-      lastTime = performance.now();
+
+    // Ensure timeDelta doesn't exceed a reasonable amount (e.g., if the game was paused)
+    if (timeDelta > 1000) {
+      timeDelta = frameDuration;
     }
+
+    while (timeDelta >= frameDuration) {
+      animate(frameDuration);
+      lastTime += frameDuration;
+      timeDelta -= frameDuration;
+    }
+
+    lastTime = now;
+
+    // Request the next frame
+    requestAnimationFrame(mainLoop);
   }
+
+
+  // Start the loop
+  requestAnimationFrame(mainLoop);
+
 
   function animate(timeDelta) {
     if (isPlaying) {
@@ -305,7 +319,7 @@ window.addEventListener('load', function() {
     drawScene(currentTime);
     drawLineToCoordinates(targetX, targetY);
     updateTimeDisplay(currentTime);
-    requestAnimationFrame(animate);
+    // requestAnimationFrame(animate);
   }
 
   mainLoop();
