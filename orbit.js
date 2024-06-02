@@ -253,7 +253,7 @@ window.addEventListener('load', function() {
 
 
     const list = str.split(/[v-zV-Z]/);
-    if (list.length < 1) {
+    if (list.length < 1 || list[0] == "") {
       return 0;
     }
 
